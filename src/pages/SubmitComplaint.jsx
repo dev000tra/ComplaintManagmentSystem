@@ -11,14 +11,19 @@ export default function SubmitComplaint() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    if (!description.trim() && !subject.trim() ) {
+      setError(' Subject and Description are required and must be max 150 and 2,000 characters respectively.');
+      return;
 
-    if (!subject.trim() || subject.length > 150) {
+    }
+    if (!subject.trim()) {
       setError('Subject is required and must be max 150 characters.');
       return;
     }
-    if (!description.trim() || description.length > 2000) {
+    if (!description.trim()) {
       setError('Description is required and must be max 2,000 characters.');
       return;
+
     }
 
     try {
@@ -46,7 +51,7 @@ export default function SubmitComplaint() {
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
               maxLength={150}
-              required
+              
               placeholder="Short title for your issue"
             />
             <p className="mt-1 text-xs text-gray-500 text-right">
@@ -64,7 +69,7 @@ export default function SubmitComplaint() {
               onChange={(e) => setDescription(e.target.value)}
               maxLength={2000}
               rows={8}
-              required
+              
               placeholder="Describe the problem in detail…"
             />
             <p className="mt-1 text-xs text-gray-500 text-right">
