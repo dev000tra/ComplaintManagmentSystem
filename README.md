@@ -432,6 +432,25 @@ No application code changes needed.
 - Output directory: `dist`
 
 ---
+## Security
+
+### Implemented
+- **JWT stored in `HttpOnly` cookies** — not accessible to JavaScript, preventing XSS token theft
+- **`SameSite=Lax`** cookie attribute — blocks cross-site request forgery
+- **`Secure` flag in production** — cookie only sent over HTTPS
+- **15-minute access token lifetime** — minimizes exposure window
+- **bcrypt password hashing** (10 rounds, auto-salted)
+- **JWT signature verification** on every protected request
+- **Role-based access control** — `USER` vs `ADMIN` enforced server-side
+- **Server-side validation** — subject ≤ 150, description ≤ 2,000
+- **CORS locked** to the frontend origin with `credentials: true`
+- **Session invalidation** via `POST /auth/logout` (clears cookie server-side)
+
+### Planned hardening (future)
+- Refresh token rotation with SHA-256 hashed storage
+- Rate limiting on `/auth/login` and `/auth/register` (5 attempts / 15 min)
+- CSRF double-submit tokens (defense-in-depth over `SameSite`)
+- PostgreSQL migration for concurrent-write safety
 
 ## License
 
