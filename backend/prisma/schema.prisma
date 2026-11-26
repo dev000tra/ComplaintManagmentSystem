@@ -1,0 +1,33 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int         @id @default(autoincrement())
+  name         String
+  email        String      @unique
+  passwordHash String
+  role         String      @default("USER") // "USER" | "ADMIN"
+  createdAt    DateTime    @default(now())
+  complaints   Complaint[]
+}
+
+model Complaint {
+  id              Int      @id @default(autoincrement())
+  complaintNumber String   @unique
+  subject         String
+  description     String
+  status          String   @default("Pending") // "Pending" | "In Progress" | "Resolved"
+  userId          Int
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([userId])
+  @@index([status])
+}
